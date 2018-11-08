@@ -1,0 +1,131 @@
+<<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>By Yasiworks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <canvas id="myCanvas" width="1500" height="850" style="border:1px solid #000000;"></canvas>
+    <button onclick="level1()">Click to "Play!"</button>
+
+    <script>
+        var firstNumber = 0;
+        var secondNumber = 0;
+        var thirdNumber = 0;
+        var fourthNumber = 0;
+        var operation = "";
+        var secondOperation = "";
+        var thirdOperation = "";
+        var level = 0;
+        var decideOperation = 0;
+        var expectedResult = 0;
+        var score = 0;
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var count = 0;
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }   
+
+        function decideLevel(level) {
+            switch(level){
+                case 1 : level1();
+                case 2 : level2();
+                case 3 : level3();
+                case 4 : level4();
+            }
+        }
+
+        function level1(){
+            firstNumber = getRandomInt(10);
+            secondNumber = getRandomInt(10);
+            decideOperation = getRandomInt(3);
+            if(decideOperation == 0){
+               expectedResult =  eval(firstNumber + secondNumber);
+               operation = "+";
+            }else if(decideOperation == 1){
+                expectedResult =  eval(firstNumber - secondNumber);
+                operation = "-";
+            }else if(decideOperation == 3){
+                expectedResult =  eval(firstNumber * secondNumber);
+                operation = "*";
+            }else{
+                expectedResult =  eval(firstNumber / secondNumber);
+                operation = "/";
+            }
+            drawCanvas();
+        }
+
+        function level2(){
+            firstNumber = getRandomInt(10);
+            secondNumber = getRandomInt(10);
+            thirdNumber = getRandomInt(10);
+            decideOperation = getRandomInt(3);
+            if(decideOperation == 0){
+               expectedResult =  eval(firstNumber + secondNumber + thirdNumber);
+            }else if(decideOperation == 1){
+                expectedResult =  eval(firstNumber - secondNumber - thirdNUmber);
+            }else if(decideOperation == 3){
+                expectedResult =  eval(firstNumber * secondNumber * thirdNumber);
+            }else{
+                expectedResult =  eval(firstNumber / secondNumber + thirdNumber);
+            }
+            calculateResult();
+        }
+        function level3(){
+            // firstNumber = getRandomInt(10);
+            // secondNumber = getRandomInt(10);
+            // decideOperation = getRandomInt(3);
+            // if(decideOperation == 0){
+            //    expectedResult =  eval(firstNumber + secondNumber);
+            // }else if(decideOperation == 1){
+            //     expectedResult =  eval(firstNumber - secondNumber);
+            // }else if(decideOperation == 3){
+            //     expectedResult =  eval(firstNumber * secondNumber);
+            // }else{
+            //     expectedResult =  eval(firstNumber / secondNumber);
+            // }
+        }
+
+        function level4(){
+
+        }
+
+        function calculateResult(){
+            if(calculateResult == expectedResult){
+                score++ * 10;
+            }else{
+                alert("You failed mister!");
+            }
+        }
+
+        function drawCanvas(){
+            ctx.font = "130px Arial";
+            ctx.strokeText(firstNumber + "  " +  operation + "  " + secondNumber + "  " + "=", 550, 425);
+            listenForAnswer();
+        }
+        function listenForAnswer(){
+            addEventListener("keydown", function(evt) {
+                evt = evt || window.event;
+                var charCode = evt.keyCode || evt.which;
+                var charStr = String.fromCharCode(charCode);
+                writeUserAnswer(charStr);
+                });
+        }
+
+        function writeUserAnswer(answer){
+            if(count == 0){
+            ctx.font = "130px Arial";
+            ctx.strokeText(answer, 1100, 425);
+            }else{
+                count = count + 130;
+                ctx.font = "130px Arial";
+                ctx.strokeText(answer, 1100, 425);
+            }
+        }
+    </script>
+</body>
+</html>
