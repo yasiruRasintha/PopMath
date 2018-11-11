@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -25,6 +25,10 @@
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
         var count = 0;
+        var time;
+        var i = 0;
+        var givenResult = 0;
+        var stringResult = "";
 
         function getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
@@ -59,6 +63,16 @@
             drawCanvas();
         }
 
+        function amountOfDigits(){
+            if(expectedResult.toString().length == 2){
+              return 2;
+            }else if (expectedResult.toString().length == 1){
+              return 1;
+            }else{
+                level1();
+            }
+        }
+
         function level2(){
             firstNumber = getRandomInt(10);
             secondNumber = getRandomInt(10);
@@ -75,55 +89,86 @@
             }
             calculateResult();
         }
-        function level3(){
-            // firstNumber = getRandomInt(10);
-            // secondNumber = getRandomInt(10);
-            // decideOperation = getRandomInt(3);
-            // if(decideOperation == 0){
-            //    expectedResult =  eval(firstNumber + secondNumber);
-            // }else if(decideOperation == 1){
-            //     expectedResult =  eval(firstNumber - secondNumber);
-            // }else if(decideOperation == 3){
-            //     expectedResult =  eval(firstNumber * secondNumber);
-            // }else{
-            //     expectedResult =  eval(firstNumber / secondNumber);
-            // }
-        }
 
         function level4(){
 
         }
 
-        function calculateResult(){
-            if(calculateResult == expectedResult){
-                score++ * 10;
+        function calculateResult(result){
+            console.log("THis is the final shit" + result);
+            if(result == expectedResult){
+                score = score + 10;
+                console.log("This is your score:", score);
             }else{
-                alert("You failed mister!");
+                console.log("You failed mister, you gave the wrong answer! The answer was:" + expectedResult);
             }
+            removeEventListener("keypress",convertKeyPressToString);
+            console.log("removed event listener");
         }
 
         function drawCanvas(){
+            ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.font = "130px Arial";
             ctx.strokeText(firstNumber + "  " +  operation + "  " + secondNumber + "  " + "=", 550, 425);
+            console.log("Arrived at drawCanvas function!");
             listenForAnswer();
+            time = setTimeout(countTime, 5000);
         }
+
+        function countTime(){
+            console.log("You ran out of time!");
+        }
+
         function listenForAnswer(){
-            addEventListener("keydown", function(evt) {
+            givenResult = 0;
+            stringResult = "";
+            console.log("Arrived at listenForAnswer function!");
+            i = 0;
+            addEventListener("keypress",convertKeyPressToString);
+        }
+
+        function convertKeyPressToString(evt){
+            if(amountOfDigits() == 1){
+                console.log("Arrived at convertKeyPressToString function!");
                 evt = evt || window.event;
                 var charCode = evt.keyCode || evt.which;
                 var charStr = String.fromCharCode(charCode);
                 writeUserAnswer(charStr);
-                });
+                calculateResult(charStr);
+                clearTimeout(time);
+            }else if(amountOfDigits() == 2){
+                if(i == 1){
+                console.log("Arrived at i === 1!");
+                evt = evt || window.event;
+                var charCode = evt.keyCode || evt.which;
+                var charStr = String.fromCharCode(charCode);
+                writeUserAnswer(charStr);
+                clearTimeout(time);
+                stringResult = "" + givenResult + charStr;
+                calculateResult(parseInt(stringResult, 10));
+                }else if(i == 0){
+                console.log("Arrived at i == 0!");
+                evt = evt || window.event;
+                var charCode = evt.keyCode || evt.which;
+                var charStr = String.fromCharCode(charCode);
+                givenResult = charStr;
+                console.log(givenResult);
+                writeUserAnswer(charStr);
+                clearTimeout(time);
+                }
+            }
+            
         }
 
         function writeUserAnswer(answer){
+            i++;
             if(count == 0){
             ctx.font = "130px Arial";
             ctx.strokeText(answer, 1100, 425);
             }else{
                 count = count + 130;
                 ctx.font = "130px Arial";
-                ctx.strokeText(answer, 1100, 425);
+                ctx.strokeText(answer, 1100 + count, 425);
             }
         }
     </script>
